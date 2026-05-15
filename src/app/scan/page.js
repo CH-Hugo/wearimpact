@@ -50,7 +50,7 @@ export default function Scan() {
 
   return (
     <div>
-      <video ref={videoRef} autoPlay></video>
+      <video ref={videoRef} autoPlay playsInline></video>
       <canvas ref={canvasRef}></canvas>
       <button onClick={screen}>Scanner</button>
     </div>
