@@ -16,14 +16,18 @@ export default function Resultat () {
         <div>
             <h1>Résultat de l'impact</h1>
             {impact ? (
-                <div>
-                    <p>Impact carbone : {impact.impacts.cch} kg CO2e</p>
-                    <p>Impact eau : {impact.impacts.wtu} L</p>
-                    <p>Score global : {impact.impacts.ecs} kWh</p>
-                </div>
-            ) : (
-                <p>Aucun résultat disponible</p>
-            )}
+  impact.error ? (
+    <p>Erreur : {impact.error}</p>
+  ) : (
+    <div>
+      <p>Impact carbone : {impact.impacts.cch} kg CO2e</p>
+      <p>Impact eau : {impact.impacts.wtu} L</p>
+      <p>Score global : {impact.impacts.ecs}</p>
+    </div>
+  )
+) : (
+  <p>Aucun résultat disponible</p>
+)}
         </div>
     )
 }
