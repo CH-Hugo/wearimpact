@@ -1,6 +1,4 @@
 'use client'
-// useRef — accéder à un élément HTML
-// useEffect — exécuter du code après le chargement de la page
 import { useRef, useEffect } from 'react'
 import Tesseract from 'tesseract.js'
 
