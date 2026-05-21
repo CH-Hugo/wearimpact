@@ -1,9 +1,11 @@
 'use client'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Inscription() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const router = useRouter()
 
   return (
     <div>
@@ -31,9 +33,10 @@ export default function Inscription() {
             if (data.error) {
               alert(data.error)
             } else {
-              window.location.href = '/connexion'
+              router.push('/connexion')
             }
           })
+          .catch(() => alert('Erreur réseau, réessaie.'))
       }}>S'inscrire</button>
     </div>
   )
