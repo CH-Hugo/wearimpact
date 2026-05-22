@@ -6,6 +6,7 @@ export default function Home() {
     <div className="min-h-screen bg-fond">
       <Navbar />
 
+      <main>
       {/* HERO */}
       <section className="px-6 py-16 flex flex-col gap-6 items-center text-center w-full max-w-3xl mx-auto">
         <span className="text-lagune text-xs font-semibold tracking-widest uppercase">Éco-responsable</span>
@@ -50,7 +51,7 @@ export default function Home() {
             { n: '03', title: 'Progresse', desc: 'Suis ton score et améliore ta garde-robe' },
           ].map(step => (
             <div key={step.n} className="flex gap-4 p-5 bg-white rounded-2xl border border-black/5">
-              <span className="font-nunito font-black text-3xl text-menthe/40 leading-none w-10">{step.n}</span>
+              <span className="font-nunito font-black text-3xl text-menthe/40 leading-none w-10" aria-hidden="true">{step.n}</span>
               <div className="text-left">
                 <h3 className="font-nunito font-black text-base text-bleu">{step.title}</h3>
                 <p className="text-sm text-lagune mt-1">{step.desc}</p>
@@ -70,6 +71,8 @@ export default function Home() {
           </Link>
         </div>
       </section>
+
+      </main>
 
       {/* FOOTER */}
       <footer className="bg-lagune px-6 py-8 text-center w-full">
