@@ -22,19 +22,19 @@ export default function Home() {
       </section>
 
       {/* STATS */}
-      <section className="bg-bleu px-6 py-8 flex justify-around w-full">
-        <div className="max-w-3xl mx-auto flex justify-around w-full">
-          <div className="text-center text-white">
+      <section className="bg-bleu px-6 py-8 w-full">
+        <div className="max-w-3xl mx-auto flex justify-center items-center gap-0">
+          <div className="text-center text-white flex-1">
             <span className="font-nunito font-black text-2xl block">12kg</span>
             <span className="text-xs uppercase tracking-wide">CO₂ moyen</span>
           </div>
-          <div className="text-center text-white border-x border-white/20 px-6">
+          <div className="text-center text-white flex-1 border-x border-white/20 px-4">
             <span className="font-nunito font-black text-2xl block">15 000km</span>
             <span className="text-xs uppercase tracking-wide">Parcourus en moyenne</span>
           </div>
-          <div className="text-center text-white">
+          <div className="text-center text-white flex-1">
             <span className="font-nunito font-black text-2xl block">80%</span>
-            <span className="text-xs uppercase tracking-wide">produits hors Europe</span>
+            <span className="text-xs uppercase tracking-wide">Produits hors Europe</span>
           </div>
         </div>
       </section>
