@@ -82,6 +82,21 @@ export default function Home() {
           <Link href="/connexion" className="text-white/70 text-sm">Connexion</Link>
         </div>
         <p className="text-white/40 text-xs mt-4">© 2026 WearImpact</p>
+        <div className="mt-4 flex justify-center">
+          <a
+            href="https://bff.ecoindex.fr/redirect/?url=https://wearimpact.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Voir le score Ecoindex de WearImpact"
+          >
+            <img
+              src="https://bff.ecoindex.fr/badge/?theme=light&url=https://wearimpact.vercel.app/"
+              alt="Badge Ecoindex WearImpact"
+              width="100"
+              height="33"
+            />
+          </a>
+        </div>
       </footer>
     </div>
   )
