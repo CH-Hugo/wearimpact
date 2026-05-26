@@ -13,6 +13,34 @@ export default function Resultat() {
     }
   }, [])
 
+  const handleAjout = async () => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    window.location.href = '/connexion'
+    return
+  }
+
+  const response = await fetch('/api/vetements', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      pays: impact.query?.countryMaking,
+      matieres: impact.query?.materials,
+      impacts: impact.impacts
+    })
+  })
+
+  const data = await response.json()
+  if (data.error) {
+    alert(data.error)
+  } else {
+    alert('Vêtement ajouté à ta garde-robe !')
+  }
+}
+
   return (
     <div className="min-h-screen bg-fond flex flex-col">
 
@@ -102,7 +130,13 @@ export default function Resultat() {
                   Score global calculé par Ecobalyse
                 </p>
               </div>
-
+            <button
+  onClick={handleAjout}
+  aria-label="Ajouter ce vêtement à ma garde-robe"
+  className="w-full bg-bleu text-white font-nunito font-black text-base px-10 py-4 rounded-full shadow-lg"
+>
+  Ajouter à ma garde-robe →
+</button>
               {/* BOUTON AUTRE SCAN */}
               <Link
                 href="/scan"
