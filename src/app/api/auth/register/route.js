@@ -1,5 +1,6 @@
 import clientPromise from '@/lib/mongodb'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 export async function POST(request) {
   try {
@@ -21,9 +22,15 @@ export async function POST(request) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
-    await users.insertOne({ email, password: hashedPassword, createdAt: new Date() })
+    const result = await users.insertOne({ email, password: hashedPassword, createdAt: new Date() })
 
-    return Response.json({ message: 'Utilisateur créé avec succès' })
+const token = jwt.sign(
+  { id: result.insertedId, email },
+  process.env.JWT_SECRET,
+  { expiresIn: '7d' }
+)
+
+return Response.json({ message: 'Utilisateur créé avec succès', token })
   } catch (err) {
     console.error(err)
     return Response.json({ error: 'Erreur serveur' }, { status: 500 })

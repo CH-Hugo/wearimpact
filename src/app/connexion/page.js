@@ -84,7 +84,7 @@ export default function Connexion() {
                     setLoading(false)
                   } else {
                     localStorage.setItem('token', data.token)
-                    router.push('/scan')
+                    router.push('/')
                   }
                 })
                 .catch(() => {

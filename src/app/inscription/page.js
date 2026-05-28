@@ -83,7 +83,8 @@ export default function Inscription() {
                     alert(data.error)
                     setLoading(false)
                   } else {
-                    router.push('/connexion')
+                    localStorage.setItem('token', data.token)
+                    router.push('/')
                   }
                 })
                 .catch(() => {
