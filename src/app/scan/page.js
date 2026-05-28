@@ -21,22 +21,25 @@ export default function Scan() {
       })
   }, [])
 
-  const screen = () => {
-    setLoading(true)
-    const video = videoRef.current
-    const canvas = canvasRef.current
-    const context = canvas.getContext('2d')
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
-    context.drawImage(video, 0, 0, canvas.width, canvas.height)
+const screen = () => {
+  setLoading(true)
+  const video = videoRef.current
+  const canvas = canvasRef.current
+  const context = canvas.getContext('2d')
+  canvas.width = video.videoWidth
+  canvas.height = video.videoHeight
 
-    const stream = videoRef.current.srcObject
-    stream.getTracks().forEach(track => track.stop())
-    videoRef.current.srcObject = null
+  // capturer
+  context.filter = 'contrast(2) grayscale(1)'
+  context.drawImage(video, 0, 0, canvas.width, canvas.height)
+  context.filter = 'none'
 
-    context.filter = 'contrast(2) grayscale(1)'
-    context.drawImage(video, 0, 0, canvas.width, canvas.height)
-    context.filter = 'none'
+  // couper le stream
+  const stream = videoRef.current.srcObject
+  stream.getTracks().forEach(track => track.stop())
+  videoRef.current.srcObject = null
+
+  // Tesseract
 
     Tesseract.recognize(canvas, 'fra', {
   tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789% ',
