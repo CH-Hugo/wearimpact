@@ -84,6 +84,7 @@ export default function Inscription() {
                     setLoading(false)
                   } else {
                     localStorage.setItem('token', data.token)
+                    document.cookie = `token=${data.token}; path=/; max-age=604800`
                     router.push('/')
                   }
                 })
