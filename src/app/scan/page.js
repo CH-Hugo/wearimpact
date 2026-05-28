@@ -30,7 +30,17 @@ export default function Scan() {
     canvas.height = video.videoHeight
     context.drawImage(video, 0, 0, canvas.width, canvas.height)
 
-    Tesseract.recognize(canvas, 'fra')
+    const stream = videoRef.current.srcObject
+    stream.getTracks().forEach(track => track.stop())
+    videoRef.current.srcObject = null
+
+    context.filter = 'contrast(2) grayscale(1)'
+    context.drawImage(video, 0, 0, canvas.width, canvas.height)
+    context.filter = 'none'
+
+    Tesseract.recognize(canvas, 'fra', {
+  tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789% ',
+})
       .then(function(data) {
         const texte = data.data.text
         console.log(texte)
