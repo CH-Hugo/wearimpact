@@ -27,6 +27,29 @@ export async function POST(request) {
   console.log('materiesEcobalyse:', materiesEcobalyse)
   console.log('pays:', body.pays)
 
+  const paysMapping = {
+  'france': 'FR',
+  'chine': 'CN',
+  'china': 'CN',
+  'bangladesh': 'BD',
+  'inde': 'IN',
+  'india': 'IN',
+  'turquie': 'TR',
+  'turkey': 'TR',
+  'portugal': 'PT',
+  'italie': 'IT',
+  'italy': 'IT',
+  'maroc': 'MA',
+  'vietnam': 'VN',
+  'cambodge': 'KH',
+  'myanmar': 'MM',
+  'pakistan': 'PK',
+  'espagne': 'ES',
+  'spain': 'ES',
+}
+
+const codePays = body.pays ? (paysMapping[body.pays.toLowerCase()] || 'FR') : 'FR'
+
   const simulateur = await fetch('https://ecobalyse.beta.gouv.fr/api/textile/simulator', {
     method: 'POST',
     headers: {
@@ -37,7 +60,7 @@ export async function POST(request) {
       mass: 0.2,
       product: 'tshirt',
       materials: materiesEcobalyse,
-      countryMaking: 'FR'
+      countryMaking: codePays
     })
   })
 
