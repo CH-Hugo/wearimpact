@@ -21,29 +21,25 @@ export default function Scan() {
       })
   }, [])
 
-const screen = () => {
-  setLoading(true)
-  const video = videoRef.current
-  const canvas = canvasRef.current
-  const context = canvas.getContext('2d')
-  canvas.width = video.videoWidth
-  canvas.height = video.videoHeight
+  const screen = () => {
+    setLoading(true)
+    const video = videoRef.current
+    const canvas = canvasRef.current
+    const context = canvas.getContext('2d')
+    canvas.width = video.videoWidth
+    canvas.height = video.videoHeight
 
-  // capturer
-  context.filter = 'contrast(2) grayscale(1)'
-  context.drawImage(video, 0, 0, canvas.width, canvas.height)
-  context.filter = 'none'
+    context.filter = 'contrast(2) grayscale(1)'
+    context.drawImage(video, 0, 0, canvas.width, canvas.height)
+    context.filter = 'none'
 
-  // couper le stream
-  const stream = videoRef.current.srcObject
-  stream.getTracks().forEach(track => track.stop())
-  videoRef.current.srcObject = null
-
-  // Tesseract
+    const stream = videoRef.current.srcObject
+    stream.getTracks().forEach(track => track.stop())
+    videoRef.current.srcObject = null
 
     Tesseract.recognize(canvas, 'fra', {
-  tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789% ',
-})
+      tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789% ',
+    })
       .then(function(data) {
         const texte = data.data.text
         console.log(texte)
@@ -67,7 +63,6 @@ const screen = () => {
   return (
     <div className="min-h-screen bg-fond flex flex-col">
 
-      {/* HEADER */}
       <header className="px-6 py-4 flex items-center justify-between bg-fond sticky top-0 z-10">
         <Link href="/" className="text-bleu font-poppins font-bold text-xl">
           WearImpact
@@ -77,12 +72,10 @@ const screen = () => {
 
       <main className="flex-1 flex flex-col items-center px-6 py-4 gap-6 w-full max-w-3xl mx-auto">
 
-        {/* INSTRUCTIONS */}
         <p className="text-lagune text-sm text-center leading-relaxed">
           Pointe ta caméra sur l'étiquette de composition du vêtement
         </p>
 
-        {/* CAMERA */}
         <div className="relative w-full rounded-3xl overflow-hidden bg-black aspect-[3/4]">
           <video
             ref={videoRef}
@@ -90,13 +83,9 @@ const screen = () => {
             playsInline
             className="w-full h-full object-cover"
           />
-
-          {/* CADRE DE CAM */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="w-4/5 h-2/5 border-2 border-white/70 rounded-2xl" />
           </div>
-
-          {/* LABEL DANS LA CAM */}
           <div className="absolute bottom-4 left-0 right-0 flex justify-center">
             <span className="bg-black/50 text-white text-xs px-3 py-1 rounded-full font-poppins">
               Cadre l'étiquette ici
@@ -104,7 +93,6 @@ const screen = () => {
           </div>
         </div>
 
-        {/* ERREUR CAMERA */}
         {erreurCamera && (
           <div className="bg-white border border-black/10 rounded-2xl p-4 text-center w-full">
             <p className="text-bleu font-poppins text-sm">
@@ -113,7 +101,6 @@ const screen = () => {
           </div>
         )}
 
-        {/* PETIT BOUTON SCANNER EN ESPERANT QUIL SOIT ACCESSIBLE */}
         <button
           onClick={screen}
           disabled={loading || erreurCamera}
@@ -123,13 +110,19 @@ const screen = () => {
           {loading ? 'Analyse en cours…' : 'Scanner mon vêtement →'}
         </button>
 
+        <Link
+          href="/saisie-manuelle"
+          className="text-lagune text-sm font-poppins text-center underline"
+        >
+          Saisir manuellement →
+        </Link>
+
         {loading && (
           <p className="text-lagune text-xs text-center font-poppins">
             Lecture de l'étiquette, ça peut prendre quelques secondes…
           </p>
         )}
 
-        {/* Canvas caché — sert à capturer l'image */}
         <canvas ref={canvasRef} className="hidden" aria-hidden="true" />
 
       </main>

@@ -86,43 +86,43 @@ export default function SaisieManuelle() {
           </div>
 
           {matieres.map((m, index) => (
-            <div key={index} className="bg-white rounded-2xl border border-black/5 p-4 flex flex-col gap-3">
-              <div className="flex gap-3 items-center">
-                <select
-                  value={m.id}
-                  onChange={(e) => updateMatiere(index, 'id', e.target.value)}
-                  className="flex-1 border border-black/10 rounded-xl px-3 py-2 text-sm font-poppins text-bleu outline-none focus:border-bleu bg-fond"
-                  aria-label={`Matière ${index + 1}`}
-                >
-                  {listeMatieres.map(mat => (
-                    <option key={mat.id} value={mat.id}>{mat.name}</option>
-                  ))}
-                </select>
+<div key={index} className="bg-white rounded-2xl border border-black/5 p-4 flex flex-col gap-2">
+  <select
+    value={m.id}
+    onChange={(e) => updateMatiere(index, 'id', e.target.value)}
+    className="w-full border border-black/10 rounded-xl px-3 py-2 text-sm font-poppins text-bleu outline-none focus:border-bleu bg-fond"
+    aria-label={`Matière ${index + 1}`}
+  >
+    {listeMatieres.map(mat => (
+      <option key={mat.id} value={mat.id}>{mat.name}</option>
+    ))}
+  </select>
 
-                <div className="flex items-center gap-1 border border-black/10 rounded-xl px-3 py-2 bg-fond w-24">
-                  <input
-                    type="number"
-                    value={m.share}
-                    onChange={(e) => updateMatiere(index, 'share', e.target.value)}
-                    min="1"
-                    max="100"
-                    className="w-full text-sm font-poppins text-bleu outline-none bg-transparent"
-                    aria-label={`Pourcentage matière ${index + 1}`}
-                  />
-                  <span className="text-lagune text-sm">%</span>
-                </div>
+  <div className="flex gap-2 items-center">
+    <div className="flex items-center gap-1 border border-black/10 rounded-xl px-3 py-2 bg-fond flex-1">
+      <input
+        type="number"
+        value={m.share}
+        onChange={(e) => updateMatiere(index, 'share', e.target.value)}
+        min="1"
+        max="100"
+        className="w-full text-sm font-poppins text-bleu outline-none bg-transparent"
+        aria-label={`Pourcentage matière ${index + 1}`}
+      />
+      <span className="text-lagune text-sm">%</span>
+    </div>
 
-                {matieres.length > 1 && (
-                  <button
-                    onClick={() => supprimerMatiere(index)}
-                    className="text-lagune text-lg"
-                    aria-label="Supprimer cette matière"
-                  >
-                    ✕
-                  </button>
-                )}
-              </div>
-            </div>
+    {matieres.length > 1 && (
+      <button
+        onClick={() => supprimerMatiere(index)}
+        className="text-lagune text-lg px-2"
+        aria-label="Supprimer cette matière"
+      >
+        ✕
+      </button>
+    )}
+  </div>
+</div>
           ))}
 
           <button
