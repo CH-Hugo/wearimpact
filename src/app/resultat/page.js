@@ -41,6 +41,16 @@ export default function Resultat() {
   }
 }
 
+const getScore = (ecs) => {
+  if (ecs < 1000) return { lettre: 'A', couleur: 'bg-green-600', texte: 'Excellent' }
+  if (ecs < 1400) return { lettre: 'B', couleur: 'bg-menthe', texte: 'Bien' }
+  if (ecs < 1900) return { lettre: 'C', couleur: 'bg-lin', texte: 'Moyen' }
+  if (ecs < 2600) return { lettre: 'D', couleur: 'bg-lagune', texte: 'Mauvais' }
+  return { lettre: 'E', couleur: 'bg-red-500', texte: 'Très mauvais' }
+}
+
+const score = impact?.impacts?.ecs ? getScore(impact.impacts.ecs) : null
+
   return (
     <div className="min-h-screen bg-fond flex flex-col">
 
@@ -82,6 +92,17 @@ export default function Resultat() {
 
             /* RESULTATS */
             <div className="flex flex-col gap-4">
+
+              {/* SCORE A-E */}
+{score && (
+  <div className={`${score.couleur} rounded-2xl p-6 flex items-center justify-between`}>
+    <div>
+      <span className="text-white text-xs uppercase tracking-widest font-semibold">Note écologique</span>
+      <p className="text-white font-poppins text-sm mt-1">{score.texte}</p>
+    </div>
+    <span className="font-nunito font-black text-7xl text-white leading-none">{score.lettre}</span>
+  </div>
+)}
 
               {/* CO2 */}
               <div className="bg-white rounded-2xl border border-black/5 p-6">
