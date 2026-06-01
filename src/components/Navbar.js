@@ -27,6 +27,7 @@ export default function Navbar() {
           {isLoggedIn ? (
             <>
               <Link className="text-bleu font-poppins text-sm hover:text-menthe transition-colors" href="/garde-robe">Ma garde-robe</Link>
+              <Link className="text-bleu font-poppins text-sm hover:text-menthe transition-colors" href="/dashboard">Dashboard</Link>
               <button onClick={handleDeconnexion} className="text-bleu font-poppins text-sm hover:text-menthe transition-colors">Déconnexion</button>
             </>
           ) : (
@@ -54,6 +55,7 @@ export default function Navbar() {
           {isLoggedIn ? (
             <>
               <Link className="text-bleu font-poppins text-xl" href="/garde-robe" onClick={() => setIsOpen(false)}>Ma garde-robe</Link>
+              <Link className="text-bleu font-poppins text-xl" href="/dashboard" onClick={() => setIsOpen(false)}>Dashboard</Link>
               <button onClick={handleDeconnexion} className="text-bleu font-poppins text-xl">Déconnexion</button>
             </>
           ) : (

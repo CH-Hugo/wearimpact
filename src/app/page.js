@@ -1,11 +1,8 @@
 import Link from 'next/link'
-import Navbar from '@/components/Navbar'
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-fond">
-      <Navbar />
-
       <main>
       {/* HERO */}
       <section className="px-6 py-16 flex flex-col gap-6 items-center text-center w-full max-w-3xl mx-auto">

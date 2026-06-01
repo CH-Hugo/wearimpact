@@ -61,11 +61,6 @@ export default function SaisieManuelle() {
   return (
     <div className="min-h-screen bg-fond flex flex-col">
 
-      <header className="px-6 py-4 flex items-center justify-between bg-fond sticky top-0 z-10">
-        <Link href="/" className="text-bleu font-poppins font-bold text-xl">WearImpact</Link>
-        <Link href="/scan" className="text-lagune text-sm font-poppins">← Scanner</Link>
-      </header>
-
       <main className="flex-1 px-6 py-8 flex flex-col gap-6 max-w-3xl mx-auto w-full">
 
         <div>

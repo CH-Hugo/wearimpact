@@ -54,16 +54,6 @@ const score = impact?.impacts?.ecs ? getScore(impact.impacts.ecs) : null
   return (
     <div className="min-h-screen bg-fond flex flex-col">
 
-      {/* HEADER */}
-      <header className="px-6 py-4 flex items-center justify-between bg-fond sticky top-0 z-10">
-        <Link href="/" className="text-bleu font-poppins font-bold text-xl">
-          WearImpact
-        </Link>
-        <Link href="/scan" className="text-lagune text-sm font-poppins font-medium">
-          ← Nouveau scan
-        </Link>
-      </header>
-
       <main className="flex-1 flex flex-col px-6 py-8 gap-6 w-full max-w-3xl mx-auto">
 
         {/* TITRE */}

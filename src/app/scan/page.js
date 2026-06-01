@@ -68,13 +68,6 @@ export default function Scan() {
   return (
     <div className="min-h-screen bg-fond flex flex-col">
 
-      <header className="px-6 py-4 flex items-center justify-between bg-fond sticky top-0 z-10">
-        <Link href="/" className="text-bleu font-poppins font-bold text-xl">
-          WearImpact
-        </Link>
-        <span className="text-lagune text-sm font-poppins font-medium">Scanner</span>
-      </header>
-
       <main className="flex-1 flex flex-col items-center px-6 py-4 gap-6 w-full max-w-3xl mx-auto">
 
         <p className="text-lagune text-sm text-center leading-relaxed">
