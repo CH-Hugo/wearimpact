@@ -46,6 +46,11 @@ export default function Scan() {
         const etiquette = parseEtiquette(texte)
         console.log(etiquette)
 
+        if (etiquette.matieres.length === 0) {
+       window.location.href = '/saisie-manuelle'
+        return
+      }
+
         fetch('/api/impact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
