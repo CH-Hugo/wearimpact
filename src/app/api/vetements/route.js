@@ -58,3 +58,30 @@ export async function GET(request) {
         return new Response(JSON.stringify({ error: 'Token invalide' }), { status: 401 })
     }
 }
+
+export async function DELETE(request) {
+  const authHeader = request.headers.get('authorization')
+  const token = authHeader?.split(' ')[1]
+
+  if (!token) {
+    return new Response(JSON.stringify({ error: 'Token manquant' }), { status: 401 })
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const userId = decoded.id
+    const { id } = await request.json()
+
+    const client = await clientPromise
+    const db = client.db('wearimpact')
+    const collection = db.collection('impacts')
+
+    const { ObjectId } = await import('mongodb')
+    await collection.deleteOne({ _id: new ObjectId(id), userId })
+
+    return new Response(JSON.stringify({ message: 'Vêtement supprimé' }), { status: 200 })
+  } catch (error) {
+    console.error(error)
+    return new Response(JSON.stringify({ error: 'Erreur serveur' }), { status: 500 })
+  }
+}

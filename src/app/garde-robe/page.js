@@ -20,6 +20,22 @@ export default function GardeRobe() {
       })
   }, [])
 
+  const handleSupprimer = async (id) => {
+  const token = localStorage.getItem('token')
+  const response = await fetch('/api/vetements', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ id })
+  })
+  const data = await response.json()
+  if (!data.error) {
+    setVetements(vetements.filter(v => v._id !== id))
+  }
+}
+
   const getScore = (ecs) => {
     if (ecs < 1000) return { lettre: 'A', couleur: 'bg-green-600' }
     if (ecs < 1400) return { lettre: 'B', couleur: 'bg-[#447461]' }
@@ -55,15 +71,22 @@ export default function GardeRobe() {
                     <p className="font-nunito font-black text-bleu text-lg mt-0.5">{vetement.pays || 'Inconnu'}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="bg-fond text-lagune text-xs px-3 py-1 rounded-full font-medium">
-                      {new Date(vetement.createdAt).toLocaleDateString('fr-FR')}
-                    </span>
-                    {vetement.impacts?.ecs && (
-                      <span className={`${getScore(vetement.impacts.ecs).couleur} text-white font-nunito font-black text-sm px-3 py-1 rounded-full`}>
-                        {getScore(vetement.impacts.ecs).lettre}
-                      </span>
-                    )}
-                  </div>
+  <span className="bg-fond text-lagune text-xs px-3 py-1 rounded-full font-medium">
+    {new Date(vetement.createdAt).toLocaleDateString('fr-FR')}
+  </span>
+  {vetement.impacts?.ecs && (
+    <span className={`${getScore(vetement.impacts.ecs).couleur} text-white font-nunito font-black text-sm px-3 py-1 rounded-full`}>
+      {getScore(vetement.impacts.ecs).lettre}
+    </span>
+  )}
+  <button
+    onClick={() => handleSupprimer(vetement._id)}
+    aria-label="Supprimer ce vêtement"
+    className="text-red-400 text-xs font-poppins hover:text-red-600"
+  >
+    Supprimer
+  </button>
+</div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">

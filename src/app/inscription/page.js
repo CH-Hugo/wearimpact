@@ -1,13 +1,11 @@
 'use client'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function Inscription() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
 
   return (
     <div className="min-h-screen bg-fond flex flex-col">
@@ -78,7 +76,7 @@ export default function Inscription() {
                   } else {
                     localStorage.setItem('token', data.token)
                     document.cookie = `token=${data.token}; path=/; max-age=604800`
-                    router.push('/')
+                    window.location.href = '/'
                   }
                 })
                 .catch(() => {
