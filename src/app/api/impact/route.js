@@ -13,12 +13,13 @@ export async function POST(request) {
     )
   }
 
-  const materiesEcobalyse = body.matieres
-    .map(m => {
-      const matiere = trouverMatiere(m.matiere)
-      return matiere ? { id: matiere.id, share: m.pourcentage / 100 } : null
-    })
-    .filter(m => m !== null)
+const materiesEcobalyse = body.matieres.map(m => {
+  if (m.id) {
+    return { id: m.id, share: m.share }
+  }
+  const matiere = trouverMatiere(m.matiere)
+  return matiere ? { id: matiere.id, share: m.pourcentage / 100 } : null
+}).filter(m => m !== null)
 
   if (materiesEcobalyse.length === 0) {
     return Response.json({ error: 'Aucune matière trouvée' }, { status: 400 })
@@ -48,7 +49,7 @@ export async function POST(request) {
   'spain': 'ES',
 }
 
-const codePays = body.pays ? (paysMapping[body.pays.toLowerCase()] || 'FR') : 'FR'
+const codePays = body.pays ? (paysMapping[body.pays.toLowerCase()] || body.pays.toUpperCase()) : 'FR'
 
   const simulateur = await fetch('https://ecobalyse.beta.gouv.fr/api/textile/simulator', {
     method: 'POST',
