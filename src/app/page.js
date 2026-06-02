@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Home() {
   return (
@@ -11,7 +12,7 @@ export default function Home() {
           Ton vêtement<br/>a une <span className="text-menthe">histoire.</span><br/>Découvre-la.
         </h1>
         <p className="text-lagune text-sm leading-relaxed max-w-sm">
-          Scanne l'étiquette, vois l'impact réel. Pas de jugement — juste la vérité pour faire mieux, à ton rythme.
+          Scanne l&apos;étiquette, vois l&apos;impact réel. Pas de jugement — juste la vérité pour faire mieux, à ton rythme.
         </p>
         <Link href="/scan" className="bg-bleu text-white font-nunito font-black text-base px-8 py-4 rounded-full w-fit shadow-lg">
           Scanner mon vêtement →
@@ -86,11 +87,11 @@ export default function Home() {
             rel="noopener noreferrer"
             aria-label="Voir le score Ecoindex de WearImpact"
           >
-            <img
+            <Image
               src="https://bff.ecoindex.fr/badge/?theme=light&url=https://wearimpact.vercel.app/"
               alt="Badge Ecoindex WearImpact"
-              width="100"
-              height="33"
+              width={100}
+              height={33}
             />
           </a>
         </div>

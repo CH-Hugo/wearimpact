@@ -71,7 +71,7 @@ export default function Scan() {
       <main className="flex-1 flex flex-col items-center px-6 py-4 gap-6 w-full max-w-3xl mx-auto">
 
         <p className="text-lagune text-sm text-center leading-relaxed">
-          Pointe ta caméra sur l'étiquette de composition du vêtement
+          Pointe ta caméra sur l&apos;étiquette de composition du vêtement
         </p>
 
         <div className="relative w-full rounded-3xl overflow-hidden bg-black aspect-[3/4]">
@@ -86,7 +86,7 @@ export default function Scan() {
           </div>
           <div className="absolute bottom-4 left-0 right-0 flex justify-center">
             <span className="bg-black/50 text-white text-xs px-3 py-1 rounded-full font-poppins">
-              Cadre l'étiquette ici
+              Cadre l&apos;étiquette ici
             </span>
           </div>
         </div>
@@ -117,7 +117,7 @@ export default function Scan() {
 
         {loading && (
           <p className="text-lagune text-xs text-center font-poppins">
-            Lecture de l'étiquette, ça peut prendre quelques secondes…
+            Lecture de l&apos;étiquette, ça peut prendre quelques secondes…
           </p>
         )}
 

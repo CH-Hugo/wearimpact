@@ -1,17 +1,15 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 
 export default function Resultat() {
-  const [impact, setImpact] = useState(null)
-
-  useEffect(() => {
-    const impact = localStorage.getItem('impact')
-    if (impact) {
-      setImpact(JSON.parse(impact))
-      console.log(impact)
+  const [impact] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('impact')
+      if (stored) return JSON.parse(stored)
     }
-  }, [])
+    return null
+  })
 
   const handleAjout = async () => {
   const token = localStorage.getItem('token')
@@ -113,7 +111,7 @@ const score = impact?.impacts?.ecs ? getScore(impact.impacts.ecs) : null
               {/* EAU */}
               <div className="bg-white rounded-2xl border border-black/5 p-6">
                 <span className="text-lagune text-xs uppercase tracking-widest font-semibold">
-                  Consommation d'eau
+                  Consommation d&apos;eau
                 </span>
                 <div className="flex items-end gap-2 mt-2">
                   <span className="font-nunito font-black text-4xl text-bleu">
@@ -164,7 +162,7 @@ const score = impact?.impacts?.ecs ? getScore(impact.impacts.ecs) : null
           /* AUCUN RESULTAT */
           <div className="bg-white border border-black/10 rounded-2xl p-6 text-center">
             <p className="text-lagune font-poppins text-sm">
-              Aucun résultat disponible. Utilise le lien "Nouveau scan" en haut de page.
+              Aucun résultat disponible. Utilise le lien &quot;Nouveau scan&quot; en haut de page.
             </p>
           </div>
 

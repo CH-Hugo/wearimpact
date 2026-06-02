@@ -1,14 +1,13 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-
-  useEffect(() => {
-    setIsLoggedIn(!!localStorage.getItem('token'))
-  }, [])
+  const [isLoggedIn] = useState(() => {
+    if (typeof window !== 'undefined') return !!localStorage.getItem('token')
+    return false
+  })
 
   const handleDeconnexion = () => {
     localStorage.removeItem('token')

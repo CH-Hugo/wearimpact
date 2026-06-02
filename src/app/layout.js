@@ -1,5 +1,18 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { Nunito, Poppins } from 'next/font/google'
+
+const nunito = Nunito({
+  subsets: ['latin'],
+  weight: ['400', '700', '800', '900'],
+  variable: '--font-nunito',
+})
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-poppins',
+})
 
 export const metadata = {
   title: "WearImpact",
@@ -9,12 +22,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="fr" className="h-full">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
-      </head>
-      <body className="min-h-full flex flex-col">
+      <body className={`min-h-full flex flex-col ${nunito.variable} ${poppins.variable}`}>
         <Navbar />
         {children}
       </body>

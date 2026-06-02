@@ -92,7 +92,7 @@ export default function Connexion() {
           <p className="text-center text-lagune text-sm font-poppins">
             Pas encore de compte ?{' '}
             <Link href="/inscription" className="text-bleu font-medium underline">
-              S'inscrire
+              S&apos;inscrire
             </Link>
           </p>
 
