@@ -14,27 +14,34 @@ export default function GardeRobe() {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        setVetements(Array.isArray(data) ? data : [])
-      })
+      .then(data => setVetements(Array.isArray(data) ? data : []))
   }, [])
 
   const handleSupprimer = async (id) => {
-  const token = localStorage.getItem('token')
-  const response = await fetch('/api/vetements', {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify({ id })
-  })
-  const data = await response.json()
-  if (!data.error) {
-    setVetements(vetements.filter(v => v._id !== id))
+    const token = localStorage.getItem('token')
+    const response = await fetch('/api/vetements', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ id })
+    })
+    const data = await response.json()
+    if (!data.error) setVetements(vetements.filter(v => v._id !== id))
   }
-}
+
+  const handleRenommer = async (id, nom) => {
+    const token = localStorage.getItem('token')
+    await fetch('/api/vetements', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ id, nom })
+    })
+  }
 
   const getScore = (ecs) => {
     if (ecs < 1000) return { lettre: 'A', couleur: 'bg-green-600' }
@@ -65,28 +72,38 @@ export default function GardeRobe() {
           <div className="flex flex-col gap-4">
             {vetements.map(vetement => (
               <div key={vetement._id} className="bg-white rounded-2xl border border-black/5 p-5 flex flex-col gap-3">
+
+                <input
+                  type="text"
+                  defaultValue={vetement.nom || ''}
+                  placeholder="Nom du vêtement..."
+                  onBlur={(e) => handleRenommer(vetement._id, e.target.value)}
+                  className="font-nunito font-black text-bleu text-lg bg-transparent border-b border-black/10 outline-none w-full pb-1 placeholder:text-lagune/40"
+                  aria-label="Nom du vêtement"
+                />
+
                 <div className="flex justify-between items-start">
                   <div>
                     <span className="text-xs text-lagune uppercase tracking-wide font-semibold">Pays de fabrication</span>
                     <p className="font-nunito font-black text-bleu text-lg mt-0.5">{vetement.pays || 'Inconnu'}</p>
                   </div>
                   <div className="flex items-center gap-2">
-  <span className="bg-fond text-lagune text-xs px-3 py-1 rounded-full font-medium">
-    {new Date(vetement.createdAt).toLocaleDateString('fr-FR')}
-  </span>
-  {vetement.impacts?.ecs && (
-    <span className={`${getScore(vetement.impacts.ecs).couleur} text-white font-nunito font-black text-sm px-3 py-1 rounded-full`}>
-      {getScore(vetement.impacts.ecs).lettre}
-    </span>
-  )}
-  <button
-    onClick={() => handleSupprimer(vetement._id)}
-    aria-label="Supprimer ce vêtement"
-    className="text-red-400 text-xs font-poppins hover:text-red-600"
-  >
-    Supprimer
-  </button>
-</div>
+                    <span className="bg-fond text-lagune text-xs px-3 py-1 rounded-full font-medium">
+                      {new Date(vetement.createdAt).toLocaleDateString('fr-FR')}
+                    </span>
+                    {vetement.impacts?.ecs && (
+                      <span className={`${getScore(vetement.impacts.ecs).couleur} text-white font-nunito font-black text-sm px-3 py-1 rounded-full`}>
+                        {getScore(vetement.impacts.ecs).lettre}
+                      </span>
+                    )}
+                    <button
+                      onClick={() => handleSupprimer(vetement._id)}
+                      aria-label="Supprimer ce vêtement"
+                      className="text-red-400 text-xs font-poppins hover:text-red-600"
+                    >
+                      Supprimer
+                    </button>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
@@ -103,6 +120,7 @@ export default function GardeRobe() {
                     <span className="text-white/70 text-xs">score</span>
                   </div>
                 </div>
+
               </div>
             ))}
           </div>

@@ -85,3 +85,24 @@ export async function DELETE(request) {
     return new Response(JSON.stringify({ error: 'Erreur serveur' }), { status: 500 })
   }
 }
+
+export async function PATCH(request) {
+  const authHeader = request.headers.get('authorization')
+  const token = authHeader?.split(' ')[1]
+  if (!token) return new Response(JSON.stringify({ error: 'Token manquant' }), { status: 401 })
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const userId = decoded.id
+    const { id, nom } = await request.json()
+    const client = await clientPromise
+    const db = client.db('wearimpact')
+    const { ObjectId } = await import('mongodb')
+    await db.collection('impacts').updateOne(
+      { _id: new ObjectId(id), userId },
+      { $set: { nom } }
+    )
+    return new Response(JSON.stringify({ message: 'Nom mis à jour' }), { status: 200 })
+  } catch (error) {
+    return new Response(JSON.stringify({ error: 'Erreur serveur' }), { status: 500 })
+  }
+}
