@@ -92,6 +92,7 @@ export default function Home() {
               alt="Badge Ecoindex WearImpact"
               width={100}
               height={33}
+              unoptimized
             />
           </a>
         </div>
