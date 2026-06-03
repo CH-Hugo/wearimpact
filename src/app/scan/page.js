@@ -7,11 +7,12 @@ export default function Scan() {
   const videoRef = useRef(null)
   const canvasRef = useRef(null)
   const [loading, setLoading] = useState(false)
+  const [focusing, setFocusing] = useState(false)
   const [erreurCamera, setErreurCamera] = useState(false)
 
   useEffect(() => {
     navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: 'environment' } })
+      .getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } } })
       .then(function(stream) {
         videoRef.current.srcObject = stream
       })
@@ -22,15 +23,28 @@ export default function Scan() {
   }, [])
 
   const screen = () => {
+    setFocusing(true)
+    setTimeout(capturer, 800)
+  }
+
+  const capturer = () => {
+    setFocusing(false)
     setLoading(true)
+
     const video = videoRef.current
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
 
-    context.filter = 'contrast(2) grayscale(1)'
-    context.drawImage(video, 0, 0, canvas.width, canvas.height)
+    // Recadrage sur la zone centrale du cadre visible (80% largeur × 40% hauteur)
+    const cropX = video.videoWidth * 0.1
+    const cropY = video.videoHeight * 0.3
+    const cropW = video.videoWidth * 0.8
+    const cropH = video.videoHeight * 0.4
+    canvas.width = cropW * 2
+    canvas.height = cropH * 2
+
+    context.filter = 'grayscale(1) contrast(1.8) brightness(1.1)'
+    context.drawImage(video, cropX, cropY, cropW, cropH, 0, 0, canvas.width, canvas.height)
     context.filter = 'none'
 
     const stream = videoRef.current.srcObject
@@ -38,7 +52,9 @@ export default function Scan() {
     videoRef.current.srcObject = null
 
     Tesseract.recognize(canvas, 'fra', {
-      tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789% ',
+      tessedit_pageseg_mode: '6',
+      tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzàâäéèêëîïôùûüç0123456789% ',
+      preserve_interword_spaces: '1',
     })
       .then(function(data) {
         const texte = data.data.text
@@ -47,9 +63,9 @@ export default function Scan() {
         console.log(etiquette)
 
         if (etiquette.matieres.length === 0) {
-       window.location.href = '/saisie-manuelle'
-        return
-      }
+          window.location.href = '/saisie-manuelle'
+          return
+        }
 
         fetch('/api/impact', {
           method: 'POST',
@@ -101,11 +117,11 @@ export default function Scan() {
 
         <button
           onClick={screen}
-          disabled={loading || erreurCamera}
+          disabled={loading || focusing || erreurCamera}
           aria-label="Lancer la reconnaissance de l'étiquette"
           className="bg-bleu text-white font-nunito font-black text-base px-10 py-4 rounded-full shadow-lg w-full max-w-xs disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? 'Analyse en cours…' : 'Scanner mon vêtement →'}
+          {focusing ? 'Mise au point…' : loading ? 'Analyse en cours…' : 'Scanner mon vêtement →'}
         </button>
 
         <Link
