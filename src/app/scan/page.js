@@ -31,25 +31,33 @@ export default function Scan() {
     setFocusing(false)
     setLoading(true)
 
-    const video = videoRef.current
-    const canvas = canvasRef.current
-    const context = canvas.getContext('2d')
+    let video, canvas, context
+    try {
+      video = videoRef.current
+      canvas = canvasRef.current
+      context = canvas.getContext('2d')
 
-    // Recadrage sur la zone centrale du cadre visible (80% largeur × 40% hauteur)
-    const cropX = video.videoWidth * 0.1
-    const cropY = video.videoHeight * 0.3
-    const cropW = video.videoWidth * 0.8
-    const cropH = video.videoHeight * 0.4
-    canvas.width = cropW * 2
-    canvas.height = cropH * 2
+      const cropX = video.videoWidth * 0.1
+      const cropY = video.videoHeight * 0.3
+      const cropW = video.videoWidth * 0.8
+      const cropH = video.videoHeight * 0.4
+      canvas.width = cropW * 2
+      canvas.height = cropH * 2
 
-    context.filter = 'grayscale(1) contrast(1.8) brightness(1.1)'
-    context.drawImage(video, cropX, cropY, cropW, cropH, 0, 0, canvas.width, canvas.height)
-    context.filter = 'none'
+      context.filter = 'grayscale(1) contrast(1.8) brightness(1.1)'
+      context.drawImage(video, cropX, cropY, cropW, cropH, 0, 0, canvas.width, canvas.height)
+      context.filter = 'none'
 
-    const stream = videoRef.current.srcObject
-    stream.getTracks().forEach(track => track.stop())
-    videoRef.current.srcObject = null
+      const stream = videoRef.current.srcObject
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop())
+        videoRef.current.srcObject = null
+      }
+    } catch (e) {
+      console.error('Erreur capture:', e)
+      window.location.href = '/saisie-manuelle'
+      return
+    }
 
     Tesseract.recognize(canvas, 'fra', {
       tessedit_pageseg_mode: '6',
@@ -72,13 +80,22 @@ export default function Scan() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ pays: etiquette.pays, matieres: etiquette.matieres })
         })
-          .then(res => res.json())
+          .then(res => {
+            if (!res.ok) {
+              window.location.href = '/saisie-manuelle'
+              return
+            }
+            return res.json()
+          })
           .then(data => {
+            if (!data) return
             console.log(data)
             localStorage.setItem('impact', JSON.stringify(data))
             window.location.href = '/resultat'
           })
+          .catch(() => { window.location.href = '/saisie-manuelle' })
       })
+      .catch(() => { window.location.href = '/saisie-manuelle' })
   }
 
   return (
