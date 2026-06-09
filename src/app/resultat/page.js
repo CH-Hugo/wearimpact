@@ -104,8 +104,12 @@ const score = impact?.impacts?.ecs ? getScore(impact.impacts.ecs) : null
                   <span className="text-lagune font-poppins text-sm mb-1">kg CO₂e</span>
                 </div>
                 <p className="text-lagune text-xs mt-2">
-                  Équivalent CO₂ généré par la fabrication
+                  CO₂ généré tout au long du cycle de vie du vêtement
                 </p>
+               <div className="flex items-center gap-2 mt-3 bg-fond rounded-xl px-3 py-2">
+  <span className="text-lg">🚗</span>
+  <span className="text-bleu text-xs font-semibold">≈ {Math.round(impact.impacts.cch * 6)} km en voiture</span>
+</div>
               </div>
 
               {/* EAU */}
@@ -115,13 +119,17 @@ const score = impact?.impacts?.ecs ? getScore(impact.impacts.ecs) : null
                 </span>
                 <div className="flex items-end gap-2 mt-2">
                   <span className="font-nunito font-black text-4xl text-bleu">
-                    {impact.impacts.wtu}
+                    {impact.impacts.wtu?.toFixed(2)}
                   </span>
-                  <span className="text-lagune font-poppins text-sm mb-1">litres</span>
+                  <span className="text-lagune font-poppins text-sm mb-1">m³</span>
                 </div>
                 <p className="text-lagune text-xs mt-2">
-                  Eau utilisée tout au long de la production
+                  Eau utilisée tout au long du cycle de vie du vêtement
                 </p>
+                <div className="flex items-center gap-2 mt-3 bg-fond rounded-xl px-3 py-2">
+  <span className="text-lg">🚿</span>
+  <span className="text-bleu text-xs font-semibold">≈ {Math.round(impact.impacts.wtu * 1000 / 60)} douches</span>
+</div>
               </div>
 
               {/* SCORE GLOBAL */}
