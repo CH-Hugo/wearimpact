@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+import { deconnecterEtRediriger } from '@/lib/deconnexion'
 
 export default function Resultat() {
   const [impact] = useState(() => {
@@ -30,6 +31,11 @@ export default function Resultat() {
       impacts: impact.impacts
     })
   })
+
+  if (response.status === 401) {
+    deconnecterEtRediriger()
+    return
+  }
 
   const data = await response.json()
   if (data.error) {

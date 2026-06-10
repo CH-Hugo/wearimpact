@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { deconnecterEtRediriger } from '@/lib/deconnexion'
 
 export default function GardeRobe() {
   const [vetements, setVetements] = useState([])
@@ -13,8 +14,11 @@ export default function GardeRobe() {
     fetch('/api/vetements', {
       headers: { 'Authorization': `Bearer ${token}` }
     })
-      .then(res => res.json())
-      .then(data => setVetements(Array.isArray(data) ? data : []))
+      .then(res => {
+        if (res.status === 401) { deconnecterEtRediriger(); return null }
+        return res.json()
+      })
+      .then(data => { if (data) setVetements(Array.isArray(data) ? data : []) })
   }, [])
 
   const handleSupprimer = async (id) => {
@@ -27,6 +31,7 @@ export default function GardeRobe() {
       },
       body: JSON.stringify({ id })
     })
+    if (response.status === 401) { deconnecterEtRediriger(); return }
     const data = await response.json()
     if (!data.error) setVetements(vetements.filter(v => v._id !== id))
   }
