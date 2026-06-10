@@ -17,13 +17,12 @@ export async function POST(request) {
     const users = db.collection('users')
 
     const user = await users.findOne({ email })
-    if (!user) {
-      return Response.json({ error: 'Utilisateur non trouvé' }, { status: 400 })
-    }
+    const isPasswordValid = user
+      ? await bcrypt.compare(password, user.password)
+      : false
 
-    const isPasswordValid = await bcrypt.compare(password, user.password)
-    if (!isPasswordValid) {
-      return Response.json({ error: 'Mot de passe incorrect' }, { status: 400 })
+    if (!user || !isPasswordValid) {
+      return Response.json({ error: 'Email ou mot de passe incorrect' }, { status: 401 })
     }
 
     const token = jwt.sign(
