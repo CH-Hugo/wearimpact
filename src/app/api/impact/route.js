@@ -12,14 +12,12 @@ export async function POST(request) {
   const authHeader = request.headers.get('authorization')
   const token = authHeader?.split(' ')[1]
 
-  if (!token) {
-    return Response.json({ error: 'Token manquant' }, { status: 401 })
-  }
-
-  try {
-    jwt.verify(token, process.env.JWT_SECRET)
-  } catch {
-    return Response.json({ error: 'Token invalide' }, { status: 401 })
+  if (token) {
+    try {
+      jwt.verify(token, process.env.JWT_SECRET)
+    } catch {
+      return Response.json({ error: 'Token invalide' }, { status: 401 })
+    }
   }
 
   try {
