@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { deconnecterEtRediriger } from '@/lib/deconnexion'
+import { getScore } from '@/lib/score'
 
 export default function GardeRobe() {
   const [vetements, setVetements] = useState([])
@@ -48,13 +49,6 @@ export default function GardeRobe() {
     })
   }
 
-  const getScore = (ecs) => {
-    if (ecs < 1000) return { lettre: 'A', couleur: 'bg-green-600' }
-    if (ecs < 1400) return { lettre: 'B', couleur: 'bg-[#447461]' }
-    if (ecs < 1900) return { lettre: 'C', couleur: 'bg-[#8B7355]' }
-    if (ecs < 2600) return { lettre: 'D', couleur: 'bg-lagune' }
-    return { lettre: 'E', couleur: 'bg-red-500' }
-  }
 
   return (
     <div className="min-h-screen bg-fond flex flex-col">

@@ -1,13 +1,19 @@
 'use client'
-import { useState } from 'react'
+import { useState, useSyncExternalStore } from 'react'
 import Link from 'next/link'
+
+function subscribeStorage(callback) {
+  window.addEventListener('storage', callback)
+  return () => window.removeEventListener('storage', callback)
+}
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isLoggedIn] = useState(() => {
-    if (typeof window !== 'undefined') return !!localStorage.getItem('token')
-    return false
-  })
+  const isLoggedIn = useSyncExternalStore(
+    subscribeStorage,
+    () => !!localStorage.getItem('token'),
+    () => false
+  )
 
   const handleDeconnexion = () => {
     localStorage.removeItem('token')

@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { deconnecterEtRediriger } from '@/lib/deconnexion'
+import { getScore } from '@/lib/score'
 
 export default function Resultat() {
   const [impact] = useState(() => {
@@ -45,13 +46,6 @@ export default function Resultat() {
   }
 }
 
-const getScore = (ecs) => {
-  if (ecs < 1000) return { lettre: 'A', couleur: 'bg-green-600', texte: 'Excellent' }
-  if (ecs < 1400) return { lettre: 'B', couleur: 'bg-menthe', texte: 'Bien' }
-  if (ecs < 1900) return { lettre: 'C', couleur: 'bg-lin', texte: 'Moyen' }
-  if (ecs < 2600) return { lettre: 'D', couleur: 'bg-lagune', texte: 'Mauvais' }
-  return { lettre: 'E', couleur: 'bg-red-500', texte: 'Très mauvais' }
-}
 
 const score = impact?.impacts?.ecs ? getScore(impact.impacts.ecs) : null
 
