@@ -66,9 +66,7 @@ export default function Scan() {
     })
       .then(function(data) {
         const texte = data.data.text
-        console.log(texte)
         const etiquette = parseEtiquette(texte)
-        console.log(etiquette)
 
         if (etiquette.matieres.length === 0) {
           window.location.href = '/saisie-manuelle'
@@ -89,7 +87,6 @@ export default function Scan() {
           })
           .then(data => {
             if (!data) return
-            console.log(data)
             localStorage.setItem('impact', JSON.stringify(data))
             window.location.href = '/resultat'
           })

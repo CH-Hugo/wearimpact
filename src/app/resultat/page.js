@@ -1,17 +1,22 @@
 'use client'
-import { useState } from 'react'
+import { useRef, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { deconnecterEtRediriger } from '@/lib/deconnexion'
 import { getScore } from '@/lib/score'
 
 export default function Resultat() {
-  const [impact] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('impact')
-      if (stored) return JSON.parse(stored)
-    }
-    return null
-  })
+  const cacheRef = useRef(undefined)
+  const impact = useSyncExternalStore(
+    () => () => {},
+    () => {
+      if (cacheRef.current === undefined) {
+        const raw = localStorage.getItem('impact')
+        cacheRef.current = raw ? JSON.parse(raw) : null
+      }
+      return cacheRef.current
+    },
+    () => null
+  )
 
   const handleAjout = async () => {
   const token = localStorage.getItem('token')
@@ -47,7 +52,7 @@ export default function Resultat() {
 }
 
 
-const score = impact?.impacts?.ecs ? getScore(impact.impacts.ecs) : null
+  const score = impact?.impacts?.ecs ? getScore(impact.impacts.ecs) : null
 
   return (
     <div className="min-h-screen bg-fond flex flex-col">

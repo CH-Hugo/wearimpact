@@ -8,6 +8,7 @@ export default function SaisieManuelle() {
   const [listeMatieres, setListeMatieres] = useState([])
   const [listePays, setListePays] = useState([])
   const [loading, setLoading] = useState(false)
+  const [erreur, setErreur] = useState('')
 
   useEffect(() => {
     fetch('/api/materiaux')
@@ -39,21 +40,30 @@ export default function SaisieManuelle() {
     setMatieres(nouvelles)
   }
 
-  const handleCalculer = () => {
+  const handleCalculer = async () => {
     setLoading(true)
-    fetch('/api/impact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        pays: pays,
-        matieres: matieres.map(m => ({ id: m.id, share: parseInt(m.share) / 100 }))
+    setErreur('')
+    try {
+      const res = await fetch('/api/impact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pays,
+          matieres: matieres.map(m => ({ id: m.id, share: parseInt(m.share) / 100 })),
+        }),
       })
-    })
-      .then(res => res.json())
-      .then(data => {
-        localStorage.setItem('impact', JSON.stringify(data))
-        window.location.href = '/resultat'
-      })
+      const data = await res.json()
+      if (data.error) {
+        setErreur(data.error)
+        return
+      }
+      localStorage.setItem('impact', JSON.stringify(data))
+      window.location.href = '/resultat'
+    } catch {
+      setErreur('Erreur réseau, réessaie.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const totalPourcentage = matieres.reduce((sum, m) => sum + parseInt(m.share || 0), 0)
@@ -157,6 +167,12 @@ export default function SaisieManuelle() {
         {totalPourcentage !== 100 && (
           <p className="text-red-400 text-xs text-center font-poppins">
             Le total des pourcentages doit être égal à 100%
+          </p>
+        )}
+
+        {erreur && (
+          <p role="alert" className="text-red-500 text-sm font-poppins bg-red-50 px-4 py-2 rounded-xl text-center">
+            {erreur}
           </p>
         )}
 
