@@ -71,7 +71,7 @@ export default function SaisieManuelle() {
   return (
     <div className="min-h-screen bg-fond flex flex-col">
 
-      <main className="flex-1 px-6 py-8 flex flex-col gap-6 max-w-3xl mx-auto w-full">
+      <main id="contenu-principal" className="flex-1 px-6 py-8 flex flex-col gap-6 max-w-3xl mx-auto w-full">
 
         <div>
           <span className="text-lagune text-xs font-semibold tracking-widest uppercase">Saisie manuelle</span>

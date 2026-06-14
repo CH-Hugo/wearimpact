@@ -98,7 +98,7 @@ export default function Scan() {
   return (
     <div className="min-h-screen bg-fond flex flex-col">
 
-      <main className="flex-1 flex flex-col items-center px-6 py-4 gap-6 w-full max-w-3xl mx-auto">
+      <main id="contenu-principal" className="flex-1 flex flex-col items-center px-6 py-4 gap-6 w-full max-w-3xl mx-auto">
 
         <p className="text-lagune text-sm text-center leading-relaxed">
           Pointe ta caméra sur l&apos;étiquette de composition du vêtement

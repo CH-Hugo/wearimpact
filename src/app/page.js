@@ -4,7 +4,7 @@ import Image from 'next/image'
 export default function Home() {
   return (
     <div className="min-h-screen bg-fond">
-      <main>
+      <main id="contenu-principal">
       {/* HERO */}
       <section className="px-6 py-16 flex flex-col gap-6 items-center text-center w-full max-w-3xl mx-auto">
         <span className="text-lagune text-xs font-semibold tracking-widest uppercase">Éco-responsable</span>

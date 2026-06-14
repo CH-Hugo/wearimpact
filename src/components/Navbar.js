@@ -1,5 +1,5 @@
 'use client'
-import { useState, useSyncExternalStore } from 'react'
+import { useState, useEffect, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 
 function subscribeStorage(callback) {
@@ -14,6 +14,13 @@ export default function Navbar() {
     () => !!localStorage.getItem('token'),
     () => false
   )
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKey = (e) => { if (e.key === 'Escape') setIsOpen(false) }
+    document.addEventListener('keydown', handleKey)
+    return () => document.removeEventListener('keydown', handleKey)
+  }, [isOpen])
 
   const handleDeconnexion = () => {
     localStorage.removeItem('token')

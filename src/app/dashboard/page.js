@@ -26,7 +26,7 @@ export default function Dashboard() {
     const scoreMoyen = vetements.reduce((sum, v) => sum + (v.impacts?.ecs || 0), 0) / totalVetements || 0
 
 return (
-  <div className="min-h-screen bg-fond px-6 py-8">
+  <main id="contenu-principal" className="min-h-screen bg-fond px-6 py-8">
     <h1 className="font-nunito font-black text-3xl text-bleu mb-8">Mon dashboard</h1>
     
     <div className="grid grid-cols-2 gap-4">
@@ -43,6 +43,6 @@ return (
         <p className="font-nunito font-black text-3xl text-white mt-1">{Math.round(scoreMoyen)}<span className="text-sm font-normal text-white/70"> pts</span></p>
       </div>
     </div>
-  </div>
+  </main>
 )
 }

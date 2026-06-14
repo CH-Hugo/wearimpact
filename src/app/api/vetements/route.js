@@ -1,108 +1,88 @@
+import { ObjectId } from 'mongodb'
 import clientPromise from '@/lib/mongodb'
-import jwt from 'jsonwebtoken'
+import { verifierToken } from '@/lib/auth'
 
 export async function POST(request) {
-    const authHeader = request.headers.get('authorization')
-    const token = authHeader?.split(' ')[1]
-    
-    if (!token) {
-        return new Response(JSON.stringify({ error: 'Token manquant' }), { status: 401 })
-    }
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        const userId = decoded.id
-
-        const { pays, matieres, impacts } = await request.json()
-
-        const client = await clientPromise
-        const db = client.db('wearimpact')
-        const collection = db.collection('impacts')
-
-        const impact = {
-            userId,
-            pays,
-            matieres,
-            impacts,
-            createdAt: new Date()
-        }
-
-        await collection.insertOne(impact)
-
-        return new Response(JSON.stringify({ message: 'Impact enregistré' }), { status: 200 })
-    } catch (error) {
-        console.error(error)
-        return new Response(JSON.stringify({ error: 'Token invalide' }), { status: 401 })
-    }
-}
-
-export async function GET(request) {
-    const authHeader = request.headers.get('authorization')
-    const token = authHeader?.split(' ')[1]
-    
-    if (!token) {
-        return new Response(JSON.stringify({ error: 'Token manquant' }), { status: 401 })
-    }
-    
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        const userId = decoded.id
-        const client = await clientPromise
-        const db = client.db('wearimpact')
-        const collection = db.collection('impacts')
-        
-        const impacts = await collection.find({ userId }).toArray()
-        return new Response(JSON.stringify(impacts), { status: 200 })
-    } catch (error) {
-        console.error(error)
-        return new Response(JSON.stringify({ error: 'Token invalide' }), { status: 401 })
-    }
-}
-
-export async function DELETE(request) {
-  const authHeader = request.headers.get('authorization')
-  const token = authHeader?.split(' ')[1]
-
-  if (!token) {
-    return new Response(JSON.stringify({ error: 'Token manquant' }), { status: 401 })
-  }
+  const auth = verifierToken(request)
+  if (auth.erreur) return new Response(JSON.stringify({ error: auth.erreur }), { status: auth.status })
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    const userId = decoded.id
-    const { id } = await request.json()
+    const { userId } = auth
+    const { pays, matieres, impacts } = await request.json()
 
     const client = await clientPromise
     const db = client.db('wearimpact')
-    const collection = db.collection('impacts')
+    await db.collection('impacts').insertOne({ userId, pays, matieres, impacts, createdAt: new Date() })
 
-    const { ObjectId } = await import('mongodb')
-    await collection.deleteOne({ _id: new ObjectId(id), userId })
+    return new Response(JSON.stringify({ message: 'Impact enregistré' }), { status: 200 })
+  } catch (error) {
+    console.error('[POST /api/vetements]', error)
+    return new Response(JSON.stringify({ error: 'Erreur serveur' }), { status: 500 })
+  }
+}
+
+export async function GET(request) {
+  const auth = verifierToken(request)
+  if (auth.erreur) return new Response(JSON.stringify({ error: auth.erreur }), { status: auth.status })
+
+  try {
+    const { userId } = auth
+    const client = await clientPromise
+    const db = client.db('wearimpact')
+    const impacts = await db.collection('impacts').find({ userId }).toArray()
+
+    return new Response(JSON.stringify(impacts), { status: 200 })
+  } catch (error) {
+    console.error('[GET /api/vetements]', error)
+    return new Response(JSON.stringify({ error: 'Erreur serveur' }), { status: 500 })
+  }
+}
+
+export async function DELETE(request) {
+  const auth = verifierToken(request)
+  if (auth.erreur) return new Response(JSON.stringify({ error: auth.erreur }), { status: auth.status })
+
+  try {
+    const { userId } = auth
+    const { id } = await request.json()
+
+    if (!id || !ObjectId.isValid(id)) {
+      return new Response(JSON.stringify({ error: 'Identifiant invalide' }), { status: 400 })
+    }
+
+    const client = await clientPromise
+    const db = client.db('wearimpact')
+    await db.collection('impacts').deleteOne({ _id: new ObjectId(id), userId })
 
     return new Response(JSON.stringify({ message: 'Vêtement supprimé' }), { status: 200 })
   } catch (error) {
-    console.error(error)
+    console.error('[DELETE /api/vetements]', error)
     return new Response(JSON.stringify({ error: 'Erreur serveur' }), { status: 500 })
   }
 }
 
 export async function PATCH(request) {
-  const authHeader = request.headers.get('authorization')
-  const token = authHeader?.split(' ')[1]
-  if (!token) return new Response(JSON.stringify({ error: 'Token manquant' }), { status: 401 })
+  const auth = verifierToken(request)
+  if (auth.erreur) return new Response(JSON.stringify({ error: auth.erreur }), { status: auth.status })
+
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    const userId = decoded.id
+    const { userId } = auth
     const { id, nom } = await request.json()
+
+    if (!id || !ObjectId.isValid(id)) {
+      return new Response(JSON.stringify({ error: 'Identifiant invalide' }), { status: 400 })
+    }
+
     const client = await clientPromise
     const db = client.db('wearimpact')
-    const { ObjectId } = await import('mongodb')
     await db.collection('impacts').updateOne(
       { _id: new ObjectId(id), userId },
       { $set: { nom } }
     )
+
     return new Response(JSON.stringify({ message: 'Nom mis à jour' }), { status: 200 })
   } catch (error) {
+    console.error('[PATCH /api/vetements]', error)
     return new Response(JSON.stringify({ error: 'Erreur serveur' }), { status: 500 })
   }
 }

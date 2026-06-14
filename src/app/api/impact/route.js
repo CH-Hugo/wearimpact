@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import { verifierToken } from '@/lib/auth'
 
 const PAYS_MAPPING = {
   france: 'FR', chine: 'CN', china: 'CN', bangladesh: 'BD',
@@ -9,15 +9,9 @@ const PAYS_MAPPING = {
 }
 
 export async function POST(request) {
-  const authHeader = request.headers.get('authorization')
-  const token = authHeader?.split(' ')[1]
-
-  if (token) {
-    try {
-      jwt.verify(token, process.env.JWT_SECRET)
-    } catch {
-      return Response.json({ error: 'Token invalide' }, { status: 401 })
-    }
+  if (request.headers.get('authorization')) {
+    const auth = verifierToken(request)
+    if (auth.erreur) return Response.json({ error: auth.erreur }, { status: auth.status })
   }
 
   try {

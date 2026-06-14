@@ -57,7 +57,7 @@ export default function Resultat() {
   return (
     <div className="min-h-screen bg-fond flex flex-col">
 
-      <main className="flex-1 flex flex-col px-6 py-8 gap-6 w-full max-w-3xl mx-auto">
+      <main id="contenu-principal" className="flex-1 flex flex-col px-6 py-8 gap-6 w-full max-w-3xl mx-auto">
 
         {/* TITRE */}
         <div>

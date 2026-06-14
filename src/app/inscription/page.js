@@ -10,7 +10,7 @@ export default function Inscription() {
   return (
     <div className="min-h-screen bg-fond flex flex-col">
 
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-8 w-full max-w-3xl mx-auto">
+      <main id="contenu-principal" className="flex-1 flex flex-col items-center justify-center px-6 py-8 w-full max-w-3xl mx-auto">
 
         {/* CARTE FORMULAIRE */}
         <div className="bg-white rounded-3xl border border-black/5 p-8 w-full max-w-sm flex flex-col gap-6 shadow-sm">
