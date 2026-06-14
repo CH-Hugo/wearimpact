@@ -22,7 +22,7 @@ export default function Scan() {
       })
   }, [])
 
-  const screen = () => {
+  const capturerEtiquette = () => {
     setFocusing(true)
     setTimeout(capturer, 800)
   }
@@ -130,7 +130,7 @@ export default function Scan() {
         )}
 
         <button
-          onClick={screen}
+          onClick={capturerEtiquette}
           disabled={loading || focusing || erreurCamera}
           aria-label="Lancer la reconnaissance de l'étiquette"
           className="bg-bleu text-white font-nunito font-black text-base px-10 py-4 rounded-full shadow-lg w-full max-w-xs disabled:opacity-50 disabled:cursor-not-allowed"

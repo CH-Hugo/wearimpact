@@ -32,7 +32,7 @@ export async function POST(request) {
 
     const materiesEcobalyse = body.matieres
       .map((m) => {
-        if (m.id) return { id: m.id, share: m.share }
+        if (m.id) return { id: m.id, share: m.pourcentage / 100 }
         const mat = trouverMatiere(m.matiere)
         return mat ? { id: mat.id, share: m.pourcentage / 100 } : null
       })

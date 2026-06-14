@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 
 export default function SaisieManuelle() {
-  const [matieres, setMatieres] = useState([{ id: '', share: 100 }])
+  const [matieres, setMatieres] = useState([{ id: '', pourcentage: 100 }])
   const [pays, setPays] = useState('')
   const [listeMatieres, setListeMatieres] = useState([])
   const [listePays, setListePays] = useState([])
@@ -14,7 +14,7 @@ export default function SaisieManuelle() {
       .then(res => res.json())
       .then(data => {
         setListeMatieres(data)
-        if (data.length > 0) setMatieres([{ id: data[0].id, share: 100 }])
+        if (data.length > 0) setMatieres([{ id: data[0].id, pourcentage: 100 }])
       })
 
     fetch('/api/pays')
@@ -26,7 +26,7 @@ export default function SaisieManuelle() {
   }, [])
 
   const ajouterMatiere = () => {
-    setMatieres([...matieres, { id: listeMatieres[0]?.id || '', share: 0 }])
+    setMatieres([...matieres, { id: listeMatieres[0]?.id || '', pourcentage: 0 }])
   }
 
   const supprimerMatiere = (index) => {
@@ -48,7 +48,7 @@ export default function SaisieManuelle() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           pays,
-          matieres: matieres.map(m => ({ id: m.id, share: parseInt(m.share) / 100 })),
+          matieres: matieres.map(m => ({ id: m.id, pourcentage: parseInt(m.pourcentage) })),
         }),
       })
       const data = await res.json()
@@ -65,7 +65,7 @@ export default function SaisieManuelle() {
     }
   }
 
-  const totalPourcentage = matieres.reduce((sum, m) => sum + parseInt(m.share || 0), 0)
+  const totalPourcentage = matieres.reduce((sum, m) => sum + parseInt(m.pourcentage || 0), 0)
 
   return (
     <div className="min-h-screen bg-fond flex flex-col">
@@ -106,8 +106,8 @@ export default function SaisieManuelle() {
     <div className="flex items-center gap-1 border border-black/10 rounded-xl px-3 py-2 bg-fond flex-1">
       <input
         type="number"
-        value={m.share}
-        onChange={(e) => updateMatiere(index, 'share', e.target.value)}
+        value={m.pourcentage}
+        onChange={(e) => updateMatiere(index, 'pourcentage', e.target.value)}
         min="1"
         max="100"
         className="w-full text-sm font-poppins text-bleu outline-none bg-transparent"
