@@ -1,6 +1,5 @@
 'use client'
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 
 export default function SaisieManuelle() {
   const [matieres, setMatieres] = useState([{ id: '', share: 100 }])
@@ -85,7 +84,7 @@ export default function SaisieManuelle() {
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
             <span className="text-bleu text-sm font-semibold font-poppins">Composition</span>
-            <span className={`text-xs font-semibold px-2 py-1 rounded-full ${totalPourcentage === 100 ? 'bg-menthe/20 text-[#447461]' : 'bg-red-100 text-red-500'}`}>
+            <span className={`text-xs font-semibold px-2 py-1 rounded-full ${totalPourcentage === 100 ? 'bg-menthe/20 text-menthe-fonce' : 'bg-red-100 text-red-500'}`}>
               {totalPourcentage}%
             </span>
           </div>
@@ -132,7 +131,7 @@ export default function SaisieManuelle() {
 
           <button
             onClick={ajouterMatiere}
-            className="border-2 border-dashed border-menthe text-[#447461] font-nunito font-black text-sm py-3 rounded-2xl w-full"
+            className="border-2 border-dashed border-menthe text-menthe-fonce font-nunito font-black text-sm py-3 rounded-2xl w-full"
             aria-label="Ajouter une matière"
           >
             + Ajouter une matière

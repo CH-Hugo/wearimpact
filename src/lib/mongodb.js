@@ -17,6 +17,11 @@ if (uri) {
     client = new MongoClient(uri, options)
     clientPromise = client.connect()
   }
+  clientPromise.then((c) => {
+    const col = c.db('wearimpact').collection('impacts')
+    col.createIndex({ userId: 1 }).catch(() => {})
+    col.createIndex({ userId: 1, createdAt: -1 }).catch(() => {})
+  }).catch(() => {})
 } else {
   console.warn('MONGODB_URI manquant — connexion MongoDB désactivée')
 }

@@ -14,7 +14,7 @@ export async function POST(request) {
     const db = client.db('wearimpact')
     await db.collection('impacts').insertOne({ userId, pays, matieres, impacts, createdAt: new Date() })
 
-    return new Response(JSON.stringify({ message: 'Impact enregistré' }), { status: 200 })
+    return new Response(JSON.stringify({ message: 'Impact enregistré' }), { status: 201 })
   } catch (error) {
     console.error('[POST /api/vetements]', error)
     return new Response(JSON.stringify({ error: 'Erreur serveur' }), { status: 500 })

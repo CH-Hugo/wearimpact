@@ -30,7 +30,7 @@ const token = jwt.sign(
   { expiresIn: '7d' }
 )
 
-return Response.json({ message: 'Utilisateur créé avec succès', token })
+return Response.json({ message: 'Utilisateur créé avec succès', token }, { status: 201 })
   } catch (err) {
     console.error(err)
     return Response.json({ error: 'Erreur serveur' }, { status: 500 })
