@@ -161,7 +161,7 @@ export default function Scan() {
 function parseEtiquette(texte) {
   const matchPays = texte.match(/[Ff]abriqu[ée] en (\w+)|[Mm]ade in (\w+)/)
   const pays = matchPays ? (matchPays[1] || matchPays[2]) : null
-  const matieres = [...texte.matchAll(/(\d+)\s*%\s*(\w+)/g)]
+  const matieres = [...texte.matchAll(/(\d+)\s{0,5}%\s{0,5}(\w+)/g)]
     .map(match => ({ pourcentage: parseInt(match[1]), matiere: match[2] }))
   return { pays, matieres }
 }

@@ -12,6 +12,10 @@ export async function POST(request) {
       return Response.json({ error: 'Email et mot de passe requis' }, { status: 400 })
     }
 
+    if (!clientPromise) {
+      return Response.json({ error: 'Base de données non configurée' }, { status: 503 })
+    }
+
     const client = await clientPromise
     const db = client.db('wearimpact')
     const users = db.collection('users')

@@ -2,9 +2,12 @@ import { ObjectId } from 'mongodb'
 import clientPromise from '@/lib/mongodb'
 import { verifierToken } from '@/lib/auth'
 
+const DB_INDISPONIBLE = new Response(JSON.stringify({ error: 'Base de données non configurée' }), { status: 503 })
+
 export async function POST(request) {
   const auth = verifierToken(request)
   if (auth.erreur) return new Response(JSON.stringify({ error: auth.erreur }), { status: auth.status })
+  if (!clientPromise) return DB_INDISPONIBLE
 
   try {
     const { userId } = auth
@@ -24,6 +27,7 @@ export async function POST(request) {
 export async function GET(request) {
   const auth = verifierToken(request)
   if (auth.erreur) return new Response(JSON.stringify({ error: auth.erreur }), { status: auth.status })
+  if (!clientPromise) return DB_INDISPONIBLE
 
   try {
     const { userId } = auth
@@ -41,6 +45,7 @@ export async function GET(request) {
 export async function DELETE(request) {
   const auth = verifierToken(request)
   if (auth.erreur) return new Response(JSON.stringify({ error: auth.erreur }), { status: auth.status })
+  if (!clientPromise) return DB_INDISPONIBLE
 
   try {
     const { userId } = auth
@@ -64,6 +69,7 @@ export async function DELETE(request) {
 export async function PATCH(request) {
   const auth = verifierToken(request)
   if (auth.erreur) return new Response(JSON.stringify({ error: auth.erreur }), { status: auth.status })
+  if (!clientPromise) return DB_INDISPONIBLE
 
   try {
     const { userId } = auth

@@ -6,25 +6,49 @@ export default function Inscription() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [erreur, setErreur] = useState('')
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setErreur('')
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      const data = await res.json()
+      if (data.error) {
+        setErreur(data.error)
+      } else {
+        localStorage.setItem('token', data.token)
+        document.cookie = `token=${data.token}; path=/; max-age=604800`
+        window.location.href = '/'
+      }
+    } catch {
+      setErreur('Erreur réseau, réessaie.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-fond flex flex-col">
-
       <main id="contenu-principal" className="flex-1 flex flex-col items-center justify-center px-6 py-8 w-full max-w-3xl mx-auto">
-
-        {/* CARTE FORMULAIRE */}
         <div className="bg-white rounded-3xl border border-black/5 p-8 w-full max-w-sm flex flex-col gap-6 shadow-sm">
 
-          {/* TITRE */}
           <div>
             <span className="text-lagune text-xs font-semibold tracking-widest uppercase">Bienvenue</span>
-            <h1 className="font-nunito font-black text-2xl text-bleu mt-1">
-              Créer un compte
-            </h1>
+            <h1 className="font-nunito font-black text-2xl text-bleu mt-1">Créer un compte</h1>
           </div>
 
-          {/* CHAMPS */}
-          <div className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+            {erreur && (
+              <p role="alert" className="text-red-500 text-sm font-poppins bg-red-50 px-4 py-2 rounded-xl">
+                {erreur}
+              </p>
+            )}
 
             <div className="flex flex-col gap-1">
               <label htmlFor="email" className="text-bleu font-poppins text-sm font-medium">
@@ -54,41 +78,15 @@ export default function Inscription() {
               />
             </div>
 
-          </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-bleu text-white font-nunito font-black text-base py-4 rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Création en cours…' : 'Créer mon compte →'}
+            </button>
+          </form>
 
-          {/* BOUTON */}
-          <button
-            disabled={loading}
-            aria-label="Créer mon compte"
-            className="bg-bleu text-white font-nunito font-black text-base py-4 rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={() => {
-              setLoading(true)
-              fetch('/api/auth/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-              })
-                .then(res => res.json())
-                .then(data => {
-                  if (data.error) {
-                    alert(data.error)
-                    setLoading(false)
-                  } else {
-                    localStorage.setItem('token', data.token)
-                    document.cookie = `token=${data.token}; path=/; max-age=604800`
-                    window.location.href = '/'
-                  }
-                })
-                .catch(() => {
-                  alert('Erreur réseau, réessaie.')
-                  setLoading(false)
-                })
-            }}
-          >
-            {loading ? 'Création en cours…' : 'Créer mon compte →'}
-          </button>
-
-          {/* LIEN CONNEXION */}
           <p className="text-center text-lagune text-sm font-poppins">
             Déjà un compte ?{' '}
             <Link href="/connexion" className="text-bleu font-medium underline">
