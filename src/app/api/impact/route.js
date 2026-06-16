@@ -1,3 +1,4 @@
+import clientPromise from '@/lib/mongodb'
 import { verifierToken } from '@/lib/auth'
 
 const PAYS_MAPPING = {
@@ -62,6 +63,17 @@ export async function POST(request) {
     if (!simResp.ok) throw new Error(`Ecobalyse simulator : HTTP ${simResp.status}`)
 
     const impact = await simResp.json()
+
+    if (clientPromise) {
+      clientPromise
+        .then(client => client.db('wearimpact').collection('stats').updateOne(
+          { _id: 'scans' },
+          { $inc: { total: 1 } },
+          { upsert: true }
+        ))
+        .catch(err => console.error('[stats]', err.message))
+    }
+
     return Response.json(impact)
   } catch (err) {
     console.error('[/api/impact]', err.message)

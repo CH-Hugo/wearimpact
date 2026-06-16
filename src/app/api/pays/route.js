@@ -2,6 +2,7 @@ export async function GET() {
   try {
     const response = await fetch('https://ecobalyse.beta.gouv.fr/api/textile/countries', {
       headers: { token: process.env.ECOBALYSE_API_TOKEN },
+      next: { revalidate: 3600 },
     })
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     const data = await response.json()

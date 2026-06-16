@@ -11,13 +11,20 @@ export default function Scan() {
   const [erreurCamera, setErreurCamera] = useState(false)
 
   useEffect(() => {
+    const isInAppBrowser = () => /TikTok|FBAN|FBAV/i.test(navigator.userAgent || '')
+
+    if (isInAppBrowser() || !navigator.mediaDevices?.getUserMedia) {
+      window.location.href = '/saisie-manuelle'
+      return
+    }
+
     navigator.mediaDevices
       .getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } } })
       .then(function(stream) {
         videoRef.current.srcObject = stream
       })
       .catch(function(err) {
-        console.error(err)
+        console.error('[scan] Caméra inaccessible:', err.name)
         setErreurCamera(true)
       })
   }, [])
