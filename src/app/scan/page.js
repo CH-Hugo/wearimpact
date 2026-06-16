@@ -128,9 +128,9 @@ export default function Scan() {
 
         <Link
           href="/saisie-manuelle"
-          className="text-lagune text-sm font-poppins text-center underline"
+          className="w-full max-w-xs border-2 border-bleu text-bleu font-nunito font-black text-base px-10 py-4 rounded-full text-center"
         >
-          Saisir manuellement →
+          Saisir manuellement
         </Link>
 
         {loading && (
