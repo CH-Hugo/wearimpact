@@ -55,6 +55,7 @@ export default function Scan() {
       }
     } catch (e) {
       console.error('Erreur capture:', e)
+      localStorage.setItem('etiquetteDetectee', JSON.stringify({ pays: null, matieres: [] }))
       window.location.href = '/saisie-manuelle'
       return
     }
@@ -65,34 +66,14 @@ export default function Scan() {
       preserve_interword_spaces: '1',
     })
       .then(function(data) {
-        const texte = data.data.text
-        const etiquette = parseEtiquette(texte)
-
-        if (etiquette.matieres.length === 0) {
-          window.location.href = '/saisie-manuelle'
-          return
-        }
-
-        fetch('/api/impact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pays: etiquette.pays, matieres: etiquette.matieres })
-        })
-          .then(res => {
-            if (!res.ok) {
-              window.location.href = '/saisie-manuelle'
-              return
-            }
-            return res.json()
-          })
-          .then(data => {
-            if (!data) return
-            localStorage.setItem('impact', JSON.stringify(data))
-            window.location.href = '/resultat'
-          })
-          .catch(() => { window.location.href = '/saisie-manuelle' })
+        const etiquette = parseEtiquette(data.data.text)
+        localStorage.setItem('etiquetteDetectee', JSON.stringify(etiquette))
+        window.location.href = '/saisie-manuelle'
       })
-      .catch(() => { window.location.href = '/saisie-manuelle' })
+      .catch(() => {
+        localStorage.setItem('etiquetteDetectee', JSON.stringify({ pays: null, matieres: [] }))
+        window.location.href = '/saisie-manuelle'
+      })
   }
 
   return (

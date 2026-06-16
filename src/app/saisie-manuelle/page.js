@@ -10,19 +10,46 @@ export default function SaisieManuelle() {
   const [erreur, setErreur] = useState('')
 
   useEffect(() => {
-    fetch('/api/materiaux')
-      .then(res => res.json())
-      .then(data => {
-        setListeMatieres(data)
-        if (data.length > 0) setMatieres([{ id: data[0].id, pourcentage: 100 }])
-      })
+    Promise.all([
+      fetch('/api/materiaux').then(res => res.json()),
+      fetch('/api/pays').then(res => res.json()),
+    ]).then(([dataMatieres, dataPays]) => {
+      setListeMatieres(dataMatieres)
+      setListePays(dataPays)
 
-    fetch('/api/pays')
-      .then(res => res.json())
-      .then(data => {
-        setListePays(data)
-        if (data.length > 0) setPays(data[0].code)
-      })
+      const stocke = localStorage.getItem('etiquetteDetectee')
+      localStorage.removeItem('etiquetteDetectee')
+
+      let etiquette = null
+      if (stocke) {
+        try { etiquette = JSON.parse(stocke) } catch { etiquette = null }
+      }
+
+      if (etiquette?.matieres?.length > 0) {
+        // Résolution des noms détectés par OCR vers les ids Ecobalyse
+        const trouvees = etiquette.matieres
+          .map(m => {
+            const mat = dataMatieres.find(mat =>
+              mat.name.toLowerCase().includes(m.matiere.toLowerCase())
+            )
+            return mat ? { id: mat.id, pourcentage: m.pourcentage } : null
+          })
+          .filter(Boolean)
+        setMatieres(trouvees.length > 0 ? trouvees : [{ id: dataMatieres[0]?.id || '', pourcentage: 100 }])
+      } else {
+        if (dataMatieres.length > 0) setMatieres([{ id: dataMatieres[0].id, pourcentage: 100 }])
+      }
+
+      if (etiquette?.pays) {
+        const paysTrouve = dataPays.find(p =>
+          p.name.toLowerCase().includes(etiquette.pays.toLowerCase()) ||
+          etiquette.pays.toLowerCase().includes(p.name.toLowerCase())
+        )
+        setPays(paysTrouve ? paysTrouve.code : (dataPays[0]?.code || ''))
+      } else {
+        if (dataPays.length > 0) setPays(dataPays[0].code)
+      }
+    })
   }, [])
 
   const ajouterMatiere = () => {
