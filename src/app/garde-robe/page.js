@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { deconnecterEtRediriger } from '@/lib/deconnexion'
 import { getScore } from '@/lib/score'
 
@@ -63,9 +64,9 @@ export default function GardeRobe() {
         {vetements.length === 0 ? (
           <div className="bg-white rounded-2xl border border-black/5 p-8 text-center flex flex-col gap-4">
             <p className="text-lagune font-poppins text-sm">Ta garde-robe est vide.</p>
-            <a href="/scan" className="bg-bleu text-white font-nunito font-black px-6 py-3 rounded-full text-sm inline-block">
+            <Link href="/scan" className="bg-bleu text-white font-nunito font-black px-6 py-3 rounded-full text-sm inline-block">
               Scanner mon premier vêtement →
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="flex flex-col gap-4">

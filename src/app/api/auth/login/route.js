@@ -37,7 +37,7 @@ export async function POST(request) {
 
     return Response.json({ message: 'Connexion réussie', token })
   } catch (err) {
-    console.error(err)
+    console.error('[/api/auth/login]', err.message)
     return Response.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

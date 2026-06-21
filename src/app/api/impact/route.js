@@ -25,7 +25,10 @@ export async function POST(request) {
     const matResp = await fetch('https://ecobalyse.beta.gouv.fr/api/textile/materials', {
       headers: { token: process.env.ECOBALYSE_API_TOKEN },
     })
-    if (!matResp.ok) throw new Error(`Ecobalyse materials : HTTP ${matResp.status}`)
+    if (!matResp.ok) {
+      console.error('[/api/impact]', `Ecobalyse materials : HTTP ${matResp.status}`)
+      return Response.json({ error: 'Service Ecobalyse indisponible' }, { status: 502 })
+    }
     const materials = await matResp.json()
 
     const trouverMatiere = (nom) =>
@@ -60,7 +63,10 @@ export async function POST(request) {
         countryMaking: codePays,
       }),
     })
-    if (!simResp.ok) throw new Error(`Ecobalyse simulator : HTTP ${simResp.status}`)
+    if (!simResp.ok) {
+      console.error('[/api/impact]', `Ecobalyse simulator : HTTP ${simResp.status}`)
+      return Response.json({ error: 'Service Ecobalyse indisponible' }, { status: 502 })
+    }
 
     const impact = await simResp.json()
 
