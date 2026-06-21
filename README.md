@@ -9,7 +9,7 @@
 
 ## 🌍 C'est quoi ?
 
-WearImpact permet à n'importe qui de **scanner l'étiquette d'un vêtement** et de voir son impact écologique réel en quelques secondes — CO₂, consommation d'eau, score de A à E.
+WearImpact permet à n'importe qui de **scanner l'étiquette d'un vêtement** et de voir son impact écologique réel en quelques secondes, CO₂, consommation d'eau, score de A à E.
 
 Les données viennent directement de l'**API Ecobalyse**, l'outil officiel du gouvernement français. Je ne calcule rien moi-même, je délègue à une source scientifique validée.
 
@@ -72,7 +72,7 @@ Les données viennent directement de l'**API Ecobalyse**, l'outil officiel du go
 
 ### Prérequis
 - Node.js
-- Un compte [MongoDB Atlas](https://www.mongodb.com/atlas) (cluster gratuit suffisant)
+- Un compte [MongoDB Atlas](https://www.mongodb.com/atlas)
 - Un token [API Ecobalyse](https://ecobalyse.beta.gouv.fr/#/auth)
 
 ### Étapes
